@@ -31,12 +31,16 @@ const authStore = {
       },
       root: true,
     },
-    async login({ commit }, { email, password }) {
+    async login({ commit, dispatch }, { email, password }) {
       try {
         commit(LOGIN_LOADER, true);
         await firebaseLogin(email, password);
       } catch (err) {
-        console.log(err);
+        dispatch(
+          'loadMessage',
+          { type: 'error', message: err.message },
+          { root: true },
+        );
       } finally {
         commit(LOGIN_LOADER, false);
       }
